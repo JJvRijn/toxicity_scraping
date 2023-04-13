@@ -8,3 +8,6 @@ Function.py
 Splits the the pipeline into two functions
 First one allows the scrapping of the database to its string format
 Second one allows the conversion of string based activity to two float based entries
+
+Scraping DBAASP
+A pipeline that allows for the processing of the downloadable DBAASP complete database
