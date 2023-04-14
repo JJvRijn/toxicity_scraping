@@ -93,7 +93,7 @@ def scraping_hem(search_querry, selection_vector=[1,0,0,0,0,1,0,0,1,0,0,0,0], re
         return df_hemolytik
     if remove_unnatural is True:
         #removing the unnatural amino acids
-        NAA = ["A", "R", "N", "D", "C", "Q", "E", "G", "H", "I", "L", "K", "M", "F", "P", "S", "U",
+        NAA = ["A", "R", "N", "D", "C", "Q", "E", "G", "H", "I", "L", "K", "M", "F", "P", "S", 
                "T", "W", "Y", "V", " "]
         unvalid =[]
         for j in df_hemolytik.index:
@@ -293,7 +293,7 @@ def Scraping_DRAMP (input_excel_location, remove_unnatural=True,):
     df_DRAMP = df_DRAMP.reset_index(drop=True)
     #remove the unnatural AA or return current info
     if remove_unnatural is True:
-        NAA = ["A", "R", "N", "D", "C", "Q", "E", "G", "H", "I", "L", "K", "M", "F", "P", "S", "U",
+        NAA = ["A", "R", "N", "D", "C", "Q", "E", "G", "H", "I", "L", "K", "M", "F", "P", "S",
                "T", "W", "Y", "V", " "]
         unvalid =[]
         for j in df_DRAMP.index:
@@ -302,7 +302,7 @@ def Scraping_DRAMP (input_excel_location, remove_unnatural=True,):
         df_DRAMP = df_DRAMP.drop(unvalid)
         df_DRAMP = df_DRAMP.reset_index(drop=True)
     else:
-         df_final = df_DRAMP["seq", "toxic3", "toxic4", "toxic5"]
+         df_final = df_DRAMP[["seq", "toxic3", "toxic4", "toxic5"]]
          df_final = df_final.rename( columns={"toxic3":"hem_activity", "toxic4":"concentration", "toxic5":"unit_concentration"})
          return df_final
     glob = GlobalDescriptor((df_DRAMP.seq.tolist()))
@@ -338,11 +338,11 @@ def Scraping_DRAMP (input_excel_location, remove_unnatural=True,):
         (df_DRAMP["toxic4"][mask8]).astype(float)) / df_DRAMP[mask8]['MW']
     #fill in values already in µM
     df_DRAMP.loc[mask3, "CONCENTRATION_µM"] = df_DRAMP["toxic4"][mask3].astype(float)
-    df_final = df_DRAMP["seq", "toxic3", "CONCENTRATION_µM"]
+    df_final = df_DRAMP[["seq", "toxic3", "CONCENTRATION_µM"]]
     df_final = df_final.rename(columns={"toxic3":"hem_activity"})
     return df_final
 
-def Scraping_DBAASP (input_excel_location,cell_types =["human"], remove_unnatural=True):
+def Scraping_DBAASP (input_excel_location,cell_types ="human", remove_unnatural=True):
     import pandas as pd
     from modlamp.descriptors import GlobalDescriptor
     import regex as re
@@ -398,7 +398,7 @@ def Scraping_DBAASP (input_excel_location,cell_types =["human"], remove_unnatura
     DBAASP_usefull = DBAASP_usefull.reset_index(drop=True)
     if remove_unnatural is True:
         #remove unnatural Amino acids
-        NAA = ["A", "R", "N", "D", "C", "Q", "E", "G", "H", "I", "L", "K", "M", "F", "P", "S", "U",
+        NAA = ["A", "R", "N", "D", "C", "Q", "E", "G", "H", "I", "L", "K", "M", "F", "P", "S",
                "T", "W", "Y", "V", " "]
         unvalid =[]
         for j in DBAASP_usefull.index:
@@ -429,15 +429,14 @@ def Scraping_DBAASP (input_excel_location,cell_types =["human"], remove_unnatura
         mask2 = ~mask
         DBAASP_usefull.loc[mask2, "CONCENTRATION_µM"] = DBAASP_usefull["conc_num"][mask2].astype(float)
         DBAASP_usefull = DBAASP_usefull.reset_index(drop=True)
-        DBAASP_final = DBAASP_usefull["ID", "SEQUENCE", "Lysis_value", "CONCENTRATION_µM"]
+        DBAASP_final = DBAASP_usefull[["ID", "SEQUENCE", "Lysis_value", "CONCENTRATION_µM"]]
         return DBAASP_final
     else:
-        DBAASP_final = DBAASP_usefull["ID", "SEQUENCE", "Lysis_value", "conc_num", "HEMOLITIC CYTOTOXIC ACTIVITY - UNIT"]
+        DBAASP_final = DBAASP_usefull[["ID", "SEQUENCE", "Lysis_value", "conc_num", "HEMOLITIC CYTOTOXIC ACTIVITY - UNIT"]]
         return DBAASP_final
 
-def Scraping_DADP (input_excel_location, remove_unnatural=True):
+def Scraping_DADP (remove_unnatural=True):
     import pandas as pd
-    import numpy as np
     import re
     from mechanize import Browser
     #extract the availible peptides
